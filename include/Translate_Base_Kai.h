@@ -1,12 +1,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+
+#include "stringio.h"
 
 int cnt = 0;
 
 struct address {
-	char ad[256], ip[64], ip_cmp[64];
+	char domain[256], ip[64], ip_cmp[64];
 	bool IS_IPv4;
 } addr[65536];
 

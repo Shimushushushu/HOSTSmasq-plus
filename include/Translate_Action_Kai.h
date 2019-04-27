@@ -4,7 +4,7 @@ FILE *in, *out;
 
 void H2D_Init(char *src) {
 	in = fopen(src, "r");
-	out = fopen("dnsmasq.conf.domaind", "w");
+	out = fopen("dnsmasq.conf.add", "w");
 }
 
 void D2H_Init(char *src) {
@@ -19,18 +19,17 @@ void End() {
 
 void H2D_Read() {
 	int n = 0, res;
-	char buf1[512], buf2[512];
-	res = fscanf(in, "%[^\n]", buf1);
-	while(res >= 0) {
-		if(res != 0) {
-			sscanf(buf1, "%[^#]", buf2);
-			sscanf(buf2, "%s %s", addr[n].ip, addr[n].domain);
+	char buf[MAX_LINE_LENGTH];
+	res = fscanline(in, buf);
+	while(res != EOF) {
+		if(res > 0) {
+			sscanf(buf, "%s %s", addr[n].ip, addr[n].domain);
 			IS_IPv4_Check(n);
 			IP_Hash(n);
 			n++;
 		}
-		fgetc(in);
-		res = fscanf(in, "%[^\n]", buf1);
+		memset(buf, 0, MAX_LINE_LENGTH);
+		res = fscanline(in, buf);
 	}
 	cnt = n;
 }
