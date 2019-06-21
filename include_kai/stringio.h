@@ -6,7 +6,7 @@
 #include <sstream>
 #define MAX_LIST_LENGTH 65536
 
-//using namespace std;
+using namespace std;
 
 typedef struct __DOMAIN_AND_IP {
 	std::string ip, hash_ip, ad;
@@ -36,7 +36,8 @@ std::string IP_Hash(std::string src) {
 		for(int i = 0; i < 3; i++) {
 			stdpos += 4;
 			pos = tmp.find(".", pos);
-			if(pos < stdpos) { tmp.insert(stdpos - 3, stdpos - pos, '0'); pos = stdpos + 1; }
+			if(pos < stdpos) { tmp.insert(stdpos - 3, stdpos - pos, '0'); }
+			pos = stdpos + 1;
 		}
 		tmp.insert(stdpos + 1, stdpos + 4 - tmp.size(), '0'); 
 		return tmp;
@@ -45,15 +46,24 @@ std::string IP_Hash(std::string src) {
 		if(pos != std::string::npos) {
 			if(pos == 0) { tmp.insert(0, 1, '0'); pos++; }
 			if(pos == (tmp.size() - 2)) { tmp.insert(tmp.size(), 1, '0'); }
-			int tpos = 0, tcnt = 0;
-			while(tpos != std::string::npos) {
-				tpos = tmp.find(":", tpos);
+//			cout << tmp << endl;
+			int tpos = -1, tcnt = 0;
+//			while(tpos != std::string::npos) {
+//				tpos = tmp.find(":", tpos);
+//				tcnt++;
+//				tpos++;
+//			}
+			do {
+				tpos = tmp.find(":", tpos + 1);
 				tcnt++;
-			}
+			} while(tpos != std::string::npos);
+			cout << tcnt << endl;
 			tmp.insert(pos + 1, 1, '0');
+//			cout << tmp << endl;
 			for(; tcnt < 7; tcnt++) {
 				tmp.insert(pos + 1, 1, ':');
 				tmp.insert(pos + 1, 1, '0');
+//				cout << tmp << endl;
 			}
 			//need further testing
 		}
@@ -61,7 +71,8 @@ std::string IP_Hash(std::string src) {
 		for(int i = 0; i < 7; i++) {
 			stdpos += 5;
 			pos = tmp.find(":", pos);
-			if(pos < stdpos) { tmp.insert(stdpos - 4, stdpos - pos, '0'); pos = stdpos + 1; }
+			if(pos < stdpos) { tmp.insert(stdpos - 4, stdpos - pos, '0'); }
+			pos = stdpos + 1;
 		}
 		tmp.insert(stdpos + 1, stdpos + 5 - tmp.size(), '0'); 
 		return tmp;
